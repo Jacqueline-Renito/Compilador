@@ -173,7 +173,7 @@ def compilar():
 		except:
 			pass
 		ruta = '"'+archivo.name+'"'
-		system("py lexico.py "+ruta)
+		system("python3 lexico.py "+ruta)
 		bandcompil=False
 		contenido=''
 		while(bandcompil!=True):
@@ -211,37 +211,37 @@ def compilar():
 		err.close()
 	else:
 		messagebox.showwarning("Archivo no guardado","Favor de guardar el archivo.")
-#Funcion Compilar
+#Funcion Sintactico
 def sintactico():
-	global compilado
-	if compilado:
-		system("py sintactico.py lexico.txt")
-		contenido=''
-		try:
-			sint=open('sintactico.txt', 'r', encoding="utf-8")
-			errsint=open('errorsintactico.txt', 'r')
-			contenido = sint.read()
-			contenido2 = errsint.read()
-		except:
-			messagebox.showwarning("Alerta", "No se pudo abrir archivo.")
-		entryCodigo2.config(state=NORMAL)
-		entryErrores.config(state=NORMAL)
-		entryCodigo2.delete(1.0, END)
-		entryErrores.delete(1.0, END)
-		sintacticotxt=""
-		for linea in contenido:
-			sintacticotxt+=linea
-		entryCodigo2.insert(3.0, sintacticotxt[:])
-		errores=""
-		for lin in contenido2:
-			errores+=lin
-		entryErrores.insert(3.0, errores[:])
-		entryErrores.config(state=DISABLED)
-		entryCodigo2.config(state=DISABLED)
-		sint.close()
-		errsint.close()
-	else:
-		messagebox.showwarning("Alerta", "Primero compilar")
+    global compilado
+    if compilado:
+        system("python3 sintactico.py lexico.txt")
+        # Leer el resultado del análisis sintáctico desde el archivo sintactico.txt
+        try:
+            with open('sintactico.txt', 'r', encoding="utf-8") as sint_file:
+                sint_content = sint_file.read()
+            with open('errorsintactico.txt', 'r') as errsint_file:
+                errsint_content = errsint_file.read()
+        except FileNotFoundError:
+            messagebox.showerror("Error", "El archivo sintactico.txt o errorsintactico.txt no se encontró.")
+            return
+        entryCodigo2.config(state=NORMAL)
+        entryErrores.config(state=NORMAL)
+        entryCodigo2.delete(1.0, END)
+        entryErrores.delete(1.0, END)
+        sintacticotxt = ""
+        for linea in sint_content:
+            sintacticotxt += linea
+        entryCodigo2.insert(3.0, sintacticotxt[:])
+        errores = ""
+        for lin in errsint_content:
+            errores += lin
+        entryErrores.insert(3.0, errores[:])
+        entryErrores.config(state=DISABLED)
+        entryCodigo2.config(state=DISABLED)
+    else:
+        messagebox.showwarning("Alerta", "Primero compilar")
+
 	
 def lexico():
 	global compilado

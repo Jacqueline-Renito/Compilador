@@ -158,7 +158,16 @@ def obttoken(contenido):
                 token.lexema+=ch
                 i-=1
                 token.linea=numlin
-               
+            elif ch == '"':
+                estado = 'IN_DONE'
+                token.tipo = 'T_COMILLAS'
+                token.lexema += ch
+                token.linea = numlin
+            elif ch == '\\':
+                estado = 'IN_DONE'
+                token.tipo = 'T_BARRAINV'
+                token.lexema += ch
+                token.linea = numlin   
             else:
                 token.tipo='T_ERROR'
                 estado='IN_DONE'
@@ -330,6 +339,8 @@ if(len(sys.argv)==2):
 
 else:
     print("Error al abrir archivo")
+
+    
     
 
 
